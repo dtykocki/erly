@@ -10,7 +10,7 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    erly_sup:start_link().
+  erly_sup:start_link().
 
 stop(_State) ->
-    ok.
+  ok.

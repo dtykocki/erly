@@ -1,7 +1,7 @@
 {application, erly,
  [
-  {description, ""},
-  {vsn, "1"},
+  {description, "An Erlang url shortening service."},
+  {vsn, "0.0.1"},
   {registered, []},
   {applications, [
                   kernel,
