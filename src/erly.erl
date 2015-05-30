@@ -1,7 +1,7 @@
 -module(erly).
 -behaviour(gen_server).
 
--export([start_link/0, stop/0, create_address/1, lookup/1]).
+-export([start_link/0, stop/0, create_url/1, lookup_url/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 -define(SERVER, ?MODULE).
@@ -16,11 +16,11 @@ start_link() ->
 stop() ->
   gen_server:cast(?SERVER, stop).
 
-create_address(Url) ->
-  gen_server:call(?SERVER, {create_address, Url}).
+create_url(Url) ->
+  gen_server:call(?SERVER, {create_url, Url}).
 
-lookup(Id) ->
-  gen_server:call(?SERVER, {lookup, Id}).
+lookup_url(Id) ->
+  gen_server:call(?SERVER, {lookup_url, Id}).
 
 %% ------------------------------------------------------------------
 %% gen_server Function Definitions
@@ -29,11 +29,15 @@ lookup(Id) ->
 init(Args) ->
   {ok, Args}.
 
-handle_call(_Request, _From, State) ->
-  {reply, ok, State}.
+handle_call({create_url, Url}, _From, State) ->
+  Reply = erly_db:create_url(Url),
+  {reply, Reply, State};
+handle_call({lookup_url, Id}, _From, State) ->
+  Reply = erly_db:lookup_url(Id),
+  {reply, Reply, State}.
 
-handle_cast(_Msg, State) ->
-  {noreply, State}.
+handle_cast(stop, State) ->
+  {stop, normal, State}.
 
 handle_info(_Info, State) ->
   {noreply, State}.
@@ -43,3 +47,4 @@ terminate(_Reason, _State) ->
 
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
+

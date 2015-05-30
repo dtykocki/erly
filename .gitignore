@@ -2,4 +2,7 @@ deps/
 .eunit
 ebin/
 log
+*.swp
+Mnesia.*
 src/*.swp
+src/Mnesia*
