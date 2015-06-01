@@ -19,7 +19,7 @@ You can use erly as a dependency in your rebar.config:
     
 ### How to run the application:
 
-    $ erl -pa deps/*/ebin -pa ebin
+    $ erl -pa ebin
     1> application:start(mnesia).
     ok
     2> application:start(erly).
