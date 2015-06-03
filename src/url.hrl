@@ -1,0 +1,2 @@
+-record(url, {id, url}).
+-record(counter, {id, type}).

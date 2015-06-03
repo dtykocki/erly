@@ -3,8 +3,7 @@
 -export([create_schema/0, create_tables/0, ensure_loaded/0]).
 -export([create_url/1, lookup_url/1]).
 
--record(url, {id, url}).
--record(counter, {id, type}).
+-include("url.hrl").
 
 %% ------------------------------------------------------------------
 %% Mnesia Setup Function Definitions
@@ -22,7 +21,7 @@ create_tables() ->
                                 {attributes, record_info(fields, counter)}]).
 
 ensure_loaded() ->
-  ok = mnesia:wait_for_tables([url], 60000).
+  ok = mnesia:wait_for_tables([url, counter], 60000).
 
 %% ------------------------------------------------------------------
 %% API Function Definitions
