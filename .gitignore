@@ -1,8 +1,13 @@
-deps/
-.eunit
-ebin/
 log
 *.swp
 Mnesia.*
 src/*.swp
-src/Mnesia*
+.eunit
+deps
+*.o
+*.beam
+*.plt
+erl_crash.dump
+ebin
+.concrete/DEV_MODE
+.rebar
