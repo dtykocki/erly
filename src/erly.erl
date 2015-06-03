@@ -4,6 +4,8 @@
 -export([start_link/0, stop/0, create_url/1, lookup_url/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
+-include("url.hrl").
+
 -define(SERVER, ?MODULE).
 
 %% ------------------------------------------------------------------
@@ -30,7 +32,11 @@ init(Args) ->
   {ok, Args}.
 
 handle_call({create_url, Url}, _From, State) ->
-  Reply = erly_db:create_url(Url),
+  {ok, Rec} = erly_db:create_url(Url),
+  Ctx = hashids:new([{salt, binary_to_list(crypto:rand_bytes(16))},
+                     {min_hash_length, 8}]),
+  Encoded = hashids:encode(Ctx, Rec#url.id),
+  Reply = {ok, {Rec, Encoded}},
   {reply, Reply, State};
 handle_call({lookup_url, Id}, _From, State) ->
   Reply = erly_db:lookup_url(Id),
