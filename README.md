@@ -37,10 +37,10 @@ ok
 
 ```erlang
 1> erly:create_url("www.google.com").
-{ok,{{url,15,"www.google.com"},"wjGNX1Vn"}}
+{ok,{url,3,"www.google.com","68PXaMWx"}}
 
-2> erly:lookup_url(15).
-{ok,{url,15,"www.google.com"}}
+2> erly:lookup_url("68PXaMWx").
+{ok,{url,3,"www.google.com","68PXaMWx"}}
 ```
 
 ## License
