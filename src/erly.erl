@@ -32,11 +32,7 @@ init(Args) ->
   {ok, Args}.
 
 handle_call({create_url, Url}, _From, State) ->
-  {ok, Rec} = erly_db:create_url(Url),
-  Ctx = hashids:new([{salt, binary_to_list(crypto:rand_bytes(16))},
-                     {min_hash_length, 8}]),
-  Encoded = hashids:encode(Ctx, Rec#url.id),
-  Reply = {ok, {Rec, Encoded}},
+  Reply = erly_db:create_url(Url),
   {reply, Reply, State};
 handle_call({lookup_url, Id}, _From, State) ->
   Reply = erly_db:lookup_url(Id),

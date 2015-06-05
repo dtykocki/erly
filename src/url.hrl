@@ -1,2 +1,2 @@
--record(url, {id, url}).
+-record(url, {id, url, hash}).
 -record(counter, {id, type}).

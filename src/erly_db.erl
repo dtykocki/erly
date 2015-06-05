@@ -15,7 +15,8 @@ create_schema() ->
 create_tables() ->
   mnesia:create_table(url, [{disc_copies, [node()]},
                             {ram_copies, nodes()},
-                            {attributes, record_info(fields, url)}]),
+                            {attributes, record_info(fields, url)},
+                            {index, [hash]}]),
   mnesia:create_table(counter, [{disc_copies, [node()]},
                                 {ram_copies, nodes()},
                                 {attributes, record_info(fields, counter)}]).
@@ -28,14 +29,18 @@ ensure_loaded() ->
 %% ------------------------------------------------------------------
 
 create_url(LongUrl) ->
-  Rec = #url{id=next_id(), url=LongUrl},
+  Ctx = hashids:new([{salt, binary_to_list(crypto:rand_bytes(16))},
+                     {min_hash_length, 8}]),
+  Id = next_id(),
+  Encoded = hashids:encode(Ctx, Id),
+  Rec = #url{id=Id, url=LongUrl, hash=Encoded},
   Fun = fun() -> mnesia:write(Rec) end,
   {atomic, Res} = mnesia:transaction(Fun),
   {Res, Rec}.
 
-lookup_url(Id) ->
+lookup_url(Hash) ->
   Fun = fun() ->
-      case mnesia:read(url, Id) of
+      case mnesia:index_read(url, Hash, hash) of
         [Address] -> {ok, Address};
         []        -> {error, not_found}
       end
