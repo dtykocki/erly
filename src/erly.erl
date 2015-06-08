@@ -29,6 +29,9 @@ lookup_url(Id) ->
 %% ------------------------------------------------------------------
 
 init(Args) ->
+  error_logger:info_report("initializing erly"),
+  erly_db:start(),
+  error_logger:info_report("erl_db started"),
   {ok, Args}.
 
 handle_call({create_url, Url}, _From, State) ->
